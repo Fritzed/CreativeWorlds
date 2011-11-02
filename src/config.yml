@@ -1,0 +1,8 @@
+# A list of all worlds to automatically load.  If you are using a different multiworld plugin, you can ignore this.
+worlds:
+- world
+- world_nether
+
+# List of worlds that support creative mode
+creativeWorlds: 
+- creative

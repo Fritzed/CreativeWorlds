@@ -1,0 +1,63 @@
+name: CreativeWorlds
+main: me.fritz.creativeworlds.CreativeWorlds
+version: 0.4
+author: Fritz
+description: Allows designation of worlds as creative mode worlds, includes basic world management commands
+permissions:
+  cw.*:
+    description: Gives access to all CreativeWorld commands
+    children:
+      cw.set.*: true
+      cw.world.create: true
+      cw.world.remove: true
+      cw.world.load: true
+      cw.world.list: true
+      cw.creative: true
+      cw.build: true
+      cw.tp: true
+  cw.set.*:
+    description: Gives access to configure world settings
+    children:
+      cw.set.creative: true
+      cw.set.mobs: true
+  cw.world.create:
+    description: Allows the creation of a new world
+    default: op
+  cw.world.list:
+    description: Lists existing worlds and their creativeworld settings
+    default: op
+  cw.world.remove:
+    description: Allows the removal of an existing world
+    default: op
+  cw.world.load:
+    description: Allows the loading of an existing world
+    default: op
+  cw.set.creative:
+    description: Set a world as creative or survival
+    default: op
+  cw.set.mobs:
+    description: Configure mob setting on a world
+    default: op
+  cw.creative:
+    description: Determines whether a user can enter creative mode in creative worlds
+    default: op
+  cw.build:
+    description: Determines whether a user can build in a creative world
+    default: op
+  cw.tp:
+    description: Allow direct teleportation between worlds
+    default: op
+    
+commands:
+  cw:
+    description: creative world management (try "/cw help" for more info)
+    usage: "Usage: /cw <function> <parameters>"
+  cwtp:
+    description: teleport between worlds
+    usage: "Usage: /cwtp <worldName>"
+  creative:
+    description: enter Creative mode
+    usage: /creative
+  survival:
+    description: enter Survival mode
+    usage: /survival
