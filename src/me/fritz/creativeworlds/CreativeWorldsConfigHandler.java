@@ -63,6 +63,10 @@ public class CreativeWorldsConfigHandler {
         return false;
     }
     
+    public boolean setWorldMode(String worldName, String mode) {
+        return true;
+    }
+    
     public boolean addCreative(String worldName) {
         if (!(configCreativeWorlds.contains(worldName))) {
             configCreativeWorlds.add(worldName);
