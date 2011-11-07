@@ -13,41 +13,41 @@ This plugin is designed for server administrators that want a simple way to crea
 ** Supports /creative, /survival, /cw world create, /cw world remove, /cw world load, /cwtp, and /cw set mode
 \\\\
 === Permissions ===
-*cw.world.create*
+*cw.world.create\\
 create new worlds with /cw world create
-*cw.world.remove*
+*cw.world.remove\\
 unload worlds with /cw world remove
-*cw.world.load*
+*cw.world.load\\
 load existing worlds with /cw world load
-*cw.world.list*
+*cw.world.list\\
 list currently loaded worlds with /cw world list (not currently implemented)
-*cw.creative*
+*cw.creative\\
 use /creative and /survival on creative worlds
-*cw.build*
+*cw.build\\
 build in normal mode on creative worlds (not yet implemented)
-*cw.tp*
+*cw.tp\\
 teleport directly between worlds
 \\\\
 === Commands ===
-*/cw world create <world name> //<environment> <seed>//*
+*/cw world create <world name> //<environment> <seed>//\\
 Used to create a new world.  Environment and seed are optional.
-*/cw world load <world name> //<environment>//*
+*/cw world load <world name> //<environment>//\\
 Used to load an existing world.  Environment is optional.
 If included, environment MUST be normal, nether, or skylands.
-*/cw world remove <world name>*
+*/cw world remove <world name>\\
 Used to unload a world
 
-*/cw set creative //<world name>//*
+*/cw set creative //<world name>//\\
 Set the current world to creative mode, you can optionally target another world
-*/cw set mobs [ALL|FRIENDLY|HOSTILE|NONE] //<world name//*
+*/cw set mobs [ALL|FRIENDLY|HOSTILE|NONE] //<world name//\\
 Set the mob spawning mode for your current world, you can optionally target another world
 
-*/creative*
+*/creative\\
 Enter creative mode (if you have permissions)
-*/survival*
+*/survival\\
 Enter survival mode (if you have permissions)
 
-*/cwtp <world name>*
+*/cwtp <world name>\\
 Teleport to the spawn point of the specified world.
 \\\\
 === Future Plans ===
