@@ -3,10 +3,12 @@ worldManager: false
 
 # List of worlds that support creative mode
 worlds:
-  - name: world
-    creative: false
-    environment: normal
+  world:
+    mode: SURVIVAL
+    environment: NORMAL
+    mobs: ALL 
     
-  - name: world_nether
-    creative: false
-    environment: nether
+  world_nether:
+    mode: SURVIVAL
+    environment: NORMAL
+    mobs: ALL 

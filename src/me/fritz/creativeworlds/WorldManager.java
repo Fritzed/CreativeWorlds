@@ -4,10 +4,8 @@
  */
 package me.fritz.creativeworlds;
 
-import java.util.Iterator;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.WorldCreator;
 
 /**
  *
@@ -20,25 +18,18 @@ public class WorldManager {
         plugin = instance;
     }
     
-    public void loadWorlds() {
-        for (Iterator<String> i = plugin.config.configWorlds.iterator(); i.hasNext(); ) {
-            plugin.getServer().createWorld(new WorldCreator(i.next()));
-        }
-    }
-
     public boolean addWorld(String worldName, Environment env, String seed) {
-        WorldCreator wc = new WorldCreator(worldName);
-        wc.environment(env);
+        cWorld world = new cWorld(worldName,plugin);
+        world.env = env;
         if (seed != null) {
-            wc.seed(seedString(seed));
+            world.seed = seedString(seed);
         }
-        plugin.getServer().createWorld(wc);
-        plugin.config.addWorld(worldName);
+        
+        plugin.config.addWorld(world);
         return true;
     }
     
     public boolean removeWorld(String worldName) {
-        plugin.getServer().unloadWorld(worldName, true);
         plugin.config.removeWorld(worldName);
         return true;
     }
@@ -53,18 +44,7 @@ public class WorldManager {
     }
     
     public String getMobConfig(World world) {
-        if (world.getAllowAnimals()) {
-            if (world.getAllowMonsters()) {
-                return "all";
-            }                
-            return "animals";
-        }
-        else if (world.getAllowMonsters()) {
-            return "monsters";
-        }
-        else {
-            return "none";
-        }
+        return plugin.config.getWorld(world.getName()).mobMode.name();
     }
     
     public static Long seedString(String seed) {

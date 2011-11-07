@@ -173,14 +173,9 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
                 worldName = player.getWorld().getName();
             }
             
-            if (plugin.config.setWorldMode(worldName, args[1])) {
-                player.sendMessage(worldName + " is now set to " + args[1] + "mode.");
-                return true;
-            }
-            else {
-                player.sendMessage(worldName + " was already set to " + args[1] + " mode.");
-                return false;
-            }
+            plugin.config.setWorldMode(worldName, GameMode.valueOf(args[1].toUpperCase()));
+            player.sendMessage(worldName + " is now set to " + args[1] + "mode.");
+            return true;
         }
         player.sendMessage("You do not have permission to change a world mode.");
         return false;
@@ -196,7 +191,7 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
     private boolean cwWorld(Player player, String[] args) {        
         if (args.length >= 2) {
             if (args[1].equals("list")) {
-                return setWorldGameMode(player, args);
+                return worldList(player);
             }
             else if (args[1].equals("create")) {
                 return worldCreate(player, args);
@@ -209,6 +204,16 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
             }
         }
         return cwError(player);
+    }
+    
+    /** Handler for all "/creative world list" command
+     * 
+     * @param player The player who executed the command
+     * 
+     * @return Returns true if the command was executed successfully (always!)
+     */
+    private boolean worldList(Player player) {
+        return true;
     }
     
     /** Handler for "/creative world create" command

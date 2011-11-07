@@ -1,7 +1,13 @@
 package me.fritz.creativeworlds;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import me.fritz.creativeworlds.cWorld.MobMode;
+import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /** Manages loading or creating the configuration file for SeattleSummer
@@ -10,12 +16,11 @@ import org.bukkit.configuration.file.FileConfiguration;
  *
  */
 public class CreativeWorldsConfigHandler {
-
-    protected List<String> configWorlds = new ArrayList<String>();
-    private List<String> configCreativeWorlds = new ArrayList<String>();
-    private static CreativeWorlds plugin;
+    private Map<String,cWorld> worlds = new HashMap<String,cWorld>();
+    private CreativeWorlds plugin;
     FileConfiguration config;
-
+    Set<String> worldSet;
+    
     /** Loads configuration, creates default config file if none exists.
      * 
      * @param instance The main SeattleSummer plugin instance
@@ -25,12 +30,33 @@ public class CreativeWorldsConfigHandler {
         plugin = instance;
 
         this.config = plugin.getConfig();
-
-        this.configWorlds = config.getList("worlds");
-        this.configCreativeWorlds = config.getList("creativeWorlds");
-
         config.options().copyDefaults(true);
+        
+        this.worldSet = config.getConfigurationSection("worlds").getKeys(false);
+        
+        loadWorlds();
         plugin.saveConfig();
+    }
+    
+    /** load worlds from config file
+     * 
+     * @param worldName the name of the world being checked
+     * 
+     * @return false if world is in exclusion list
+     */
+    private void loadWorlds() {
+        String worldName;
+        for (Iterator<String> i = this.worldSet.iterator(); i.hasNext(); ) {
+            worldName = i.next();
+            cWorld world = new cWorld(worldName, plugin);
+            world.gameMode = GameMode.valueOf(this.config.getString("worlds." + worldName + ".mode").toUpperCase());
+            world.env = Environment.valueOf(this.config.getString("worlds." + worldName + ".environment").toUpperCase());
+            world.mobMode = MobMode.valueOf(this.config.getString("worlds." + worldName + ".mobs").toUpperCase());
+            if (this.config.getBoolean("worlds." + worldName + ".load")) {
+                world.load();
+            }
+            this.worlds.put(worldName, world);
+        }
     }
     
     /** Checks if a world is excluded by config file
@@ -40,50 +66,74 @@ public class CreativeWorldsConfigHandler {
      * @return false if world is in exclusion list
      */
     public boolean isCreative(String worldName) {
-        return configCreativeWorlds.contains(worldName);
-    }
-    
-    public boolean addWorld(String worldName) {
-        if (!(configWorlds.contains(worldName))) {
-            configWorlds.add(worldName);
-            this.config.set("worlds", configWorlds);
-            plugin.saveConfig();
+        if (this.worlds.get(worldName).gameMode.equals(GameMode.CREATIVE)) {
             return true;
         }
         return false;
     }
     
-    public boolean removeWorld(String worldName) {
-        if (configWorlds.contains(worldName)) {
-            configWorlds.remove(worldName);
-            this.config.set("worlds", configWorlds);
-            plugin.saveConfig();
-            return true;
-        }
-        return false;
+    /** Checks if a world is excluded by config file
+     * 
+     * @param world the world being checked
+     * 
+     * @return false if world is in exclusion list
+     */
+    public boolean isCreative(World world) {
+        return (this.isCreative(world.getName()));
     }
     
-    public boolean setWorldMode(String worldName, String mode) {
-        return true;
+    /** Adds a world to the config file;
+     * 
+     * @param world the world being added
+     */
+    public void addWorld(cWorld world) {
+        world.load();
+        
+        this.worlds.put(world.worldName,world);
+        this.config.getConfigurationSection("worlds").createSection(world.worldName);
+        this.config.set("worlds." + world.worldName + ".mode", world.gameMode.name());
+        this.config.set("worlds." + world.worldName + ".environment", world.env.name());
+        this.config.set("worlds." + world.worldName + ".mobs", world.mobMode.name());
+        this.config.set("worlds." + world.worldName + ".load", true);
+        plugin.saveConfig();
+     }
+    
+    /** Unloads world and removes from config file
+     * 
+     * @param world the world being added
+     */
+    public void removeWorld(String worldName) {
+        this.worlds.get(worldName).unload();
+        this.config.set("worlds." + worldName + ".load", false);
+        plugin.saveConfig();
     }
     
-    public boolean addCreative(String worldName) {
-        if (!(configCreativeWorlds.contains(worldName))) {
-            configCreativeWorlds.add(worldName);
-            this.config.set("creativeWorlds", configCreativeWorlds);
-            plugin.saveConfig();
-            return true;
-        }
-        return false;
+    /** Checks to see if a world is in the config
+     * 
+     * @param world the world being checked
+     * 
+     * @return True if the world is in the config
+     */
+    public boolean worldExists(String worldName) {
+        return this.worlds.containsKey(worldName);
     }
     
-    public boolean removeCreative(String worldName) {
-        if (configCreativeWorlds.contains(worldName)) {
-            configCreativeWorlds.remove(worldName);
-            this.config.set("creativeWorlds", configCreativeWorlds);
-            plugin.saveConfig();
-            return true;
-        }
-        return false;
+    /** Returns the cWorld object generated from the config file
+     * 
+     * @param world the world being checked
+     * 
+     * @return The cWorld object
+     */
+    public cWorld getWorld(String worldName) {
+        return this.worlds.get(worldName);
+    }
+    
+    public void setWorldMode(String worldName, GameMode mode) {
+        this.worlds.get(worldName).gameMode = mode;
+    }
+    
+    public void setMobMode(String worldName, MobMode mode) {
+        this.worlds.get(worldName).mobMode = mode;
+        this.worlds.get(worldName).loadMobs();
     }
 }

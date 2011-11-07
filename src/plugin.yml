@@ -1,6 +1,6 @@
 name: CreativeWorlds
 main: me.fritz.creativeworlds.CreativeWorlds
-version: 0.4
+version: 0.5
 author: Fritz
 description: Allows designation of worlds as creative mode worlds, includes basic world management commands
 permissions:

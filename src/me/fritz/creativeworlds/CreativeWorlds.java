@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /** Main CreativeWorld Class
  *  
  * @Author Fritz
- * @version 0.4
+ * @version 0.5
  */
 public class CreativeWorlds extends JavaPlugin{
     
@@ -17,7 +17,7 @@ public class CreativeWorlds extends JavaPlugin{
      */
     public CreativeWorldsConfigHandler config;
     
-    private CreativeWorldsBlockListener blockListener = new CreativeWorldsBlockListener(this);
+    private CreativeWorldsPlayerListener playerListener = new CreativeWorldsPlayerListener(this);
     private CreativeWorldsCommandExecutor commandExecutor = new CreativeWorldsCommandExecutor(this);
     static final Logger log = Logger.getLogger("Minecraft");
     public WorldManager wm;
@@ -30,14 +30,14 @@ public class CreativeWorlds extends JavaPlugin{
         config = new CreativeWorldsConfigHandler(this);
         
         PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Normal, this);
         getCommand("cw").setExecutor(commandExecutor);
         getCommand("cwtp").setExecutor(commandExecutor);
         getCommand("creative").setExecutor(commandExecutor);
         getCommand("survival").setExecutor(commandExecutor);
 
         wm = new WorldManager(this);
-        wm.loadWorlds();
         
         log.info("[CreativeWorlds] plugin enabled.");
     }
