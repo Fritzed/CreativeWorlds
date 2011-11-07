@@ -5,7 +5,6 @@ This plugin is designed for server administrators that want a simple way to crea
 === Features ===
 * Basic world management
 * Creative world designation
-* 
 \\\\
 === Changelog ===
 * Version 0.5
@@ -57,7 +56,9 @@ Enter survival mode (if you have permissions)
 Teleport to the spawn point of the specified world.
 \\\\
 === Future Plans ===
-* Much much work to be done, I don't bother listing it all for the moment.  You can get an idea by looking at the commands in the config.yml that aren't yet implemented.
+In addition to implementing some of the remaining commands listed above, I need to fix the config system again.  Somehow I managed to end up with a config file and a totally separate config stored in memory.  I really only need the file.
+
+I also plan on making it a bit smoother to use this in conjunction with another world manager.  You can disable world loading now manually in the config, but it's overcomplex for that purpose.
 \\\\
 === Installation / Upgrade ===
 # Download the latest jar file
