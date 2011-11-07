@@ -1,6 +1,6 @@
 === Summary ===
 //Basic world manager with a focus on creative worlds//\\
-This plugin is designed for server administrators that want a simple way to create worlds that allow creative building. It can be used for creating any kind of world, but it is also compatible with other world managers such as multiverse. The plugin is designed to be compatible with the current limitations of McMyAdmin, there is no need for per-world permissions. Recommend that you also use "MultiInv" to separate creative world inventories.
+This plugin is designed for server administrators that want a simple way to create worlds that allow creative building. It can be used for creating any kind of world, but it is also compatible with other world managers such as multiverse. The plugin is designed to be compatible with the current limitations of McMyAdmin, there is no need for per-world permissions. Recommend that you also use [[http://dev.bukkit.org/server-mods/multiinv/|MultiInv]] to separate creative world inventories.
 \\\\
 === Features ===
 * Basic world management
