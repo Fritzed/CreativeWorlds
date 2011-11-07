@@ -32,6 +32,7 @@ public class CreativeWorlds extends JavaPlugin{
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Event.Priority.Normal, this);
         getCommand("cw").setExecutor(commandExecutor);
         getCommand("cwtp").setExecutor(commandExecutor);
         getCommand("creative").setExecutor(commandExecutor);

@@ -130,10 +130,14 @@ public class CreativeWorldsConfigHandler {
     
     public void setWorldMode(String worldName, GameMode mode) {
         this.worlds.get(worldName).gameMode = mode;
+        this.config.set("worlds." + worldName + ".mode", mode.name());
+        plugin.saveConfig();
     }
     
-    public void setMobMode(String worldName, MobMode mode) {
+    public void setWorldMobs(String worldName, MobMode mode) {
         this.worlds.get(worldName).mobMode = mode;
+        this.config.set("worlds." + worldName + ".mobs", mode.name());
+        plugin.saveConfig();
         this.worlds.get(worldName).loadMobs();
     }
 }

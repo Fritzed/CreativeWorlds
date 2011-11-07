@@ -1,5 +1,6 @@
 package me.fritz.creativeworlds;
 
+import me.fritz.creativeworlds.cWorld.MobMode;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -49,7 +50,7 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
      * @param mode The gamemode to set the player to
      */
     private boolean setPlayerGameMode(Player player, GameMode mode) {
-        if (plugin.config.isCreative( player.getWorld().getName())) {
+        if (plugin.config.isCreative( player.getWorld())) {
             if (player.hasPermission("cw.creative")) {
                 player.setGameMode(mode);
                 return true;
@@ -123,7 +124,10 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
         player.sendMessage("  Seed: Seed for the new world.");
         player.sendMessage(ChatColor.RED + "/cw world remove " + ChatColor.GRAY + "<world name>" + ChatColor.WHITE + " - unload world and prevent autoloading of that world");
         player.sendMessage(ChatColor.RED + "/cw world load " + ChatColor.GRAY + "<world name>" + ChatColor.WHITE + " - load a world and set it to autoload on server restart");
-        player.sendMessage(ChatColor.RED + "/cw world load " + ChatColor.GRAY + "<world name>" + ChatColor.WHITE + " -");
+        player.sendMessage(ChatColor.RED + "/cw set creative "  + ChatColor.WHITE + " - Set a world to creative mode");
+        player.sendMessage(ChatColor.RED + "/cw set survival "  + ChatColor.WHITE + " - Set a world  to survival mode");
+        player.sendMessage(ChatColor.RED + "/cw set mobs " + ChatColor.GRAY + "[ALL|FRIENDLY|HOSTILE|NONE]" + ChatColor.WHITE + " - Set the mob spawning configuration for a world");
+        
         return true;
     }
     
@@ -146,9 +150,12 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
      * @return Returns true if the command was executed successfully (never!)
      */
     private boolean cwSet(Player player, String[] args) {        
-        if (args.length >= 2) {        
+        if (args.length >= 2) {
             if (args[1].equals("creative") || args[1].equals("survival")) {
                 return setWorldGameMode(player, args);
+            }
+            else if (args[1].equals("mobs")) {
+                return setWorldMobMode(player, args);
             }
         }
         return cwError(player);
@@ -174,8 +181,40 @@ public class CreativeWorldsCommandExecutor implements CommandExecutor {
             }
             
             plugin.config.setWorldMode(worldName, GameMode.valueOf(args[1].toUpperCase()));
-            player.sendMessage(worldName + " is now set to " + args[1] + "mode.");
+            player.sendMessage(worldName + " is now set to " + args[1] + " mode.");
             return true;
+        }
+        player.sendMessage("You do not have permission to change a world mode.");
+        return false;
+    }
+    
+    /** Handler for invalid cw command format
+     * 
+     * @param player The player who executed the command
+     * @param args The arguments sent with the command
+     * 
+     * @return Returns true if the command was executed successfully (never!)
+     */
+    private boolean setWorldMobMode(Player player, String[] args) {
+        if (player.hasPermission("cw.set.mobs")) {
+            String worldName;
+            
+            if (args.length > 2) {            
+                // Gets world if specified, otherwise uses the command sender's current world
+                if (args.length > 3) {
+                    worldName = args[3];
+                }
+                else {
+                    worldName = player.getWorld().getName();
+                }
+
+                plugin.config.setWorldMobs(worldName, MobMode.valueOf(args[2].toUpperCase()));
+                player.sendMessage(worldName + " now has mob spawning mode set to: " + args[2]);
+                return true;
+            }
+            player.sendMessage("Usage: " + ChatColor.RED + "/cw set mobs " + ChatColor.GRAY + "[ALL|FRIENDLY|HOSTILE|NONE] " + ChatColor.DARK_GRAY + "<world name>");
+            return false;
+            
         }
         player.sendMessage("You do not have permission to change a world mode.");
         return false;
