@@ -8,6 +8,12 @@ This plugin is designed for server administrators that want a simple way to crea
 * 
 \\\\
 === Changelog ===
+* Version 0.5
+** Complete code reorganization
+** New config file format
+** Implemented /cw set mobs
+** Broke /cw world list (for now)
+** Added player listener to prevent retention of creative mode in non-creative worlds
 * Version 0.4
 ** Initial functional release
 ** Supports /creative, /survival, /cw world create, /cw world remove, /cw world load, /cwtp, and /cw set mode
